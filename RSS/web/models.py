@@ -1,3 +1,9 @@
 from django.db import models
 
-# Create your models here.
+class canales(models.Model):
+    nombre = models.CharField(max_length=200)
+    url = models.CharField(max_length=200)
+    
+    class Meta:
+        verbose_name = "Canal"
+        verbose_name_plural = "Canales"
