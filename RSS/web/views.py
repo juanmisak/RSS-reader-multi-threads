@@ -5,13 +5,45 @@ from django.template import RequestContext
 from django.shortcuts import render
 from threading import Thread, Lock
 import Queue
+#libreria para obtener y parsear xml
+import urllib2
+import feedparser
+
 
 queue = Queue.Queue()
 myLock = Lock ()
 max_feed = 5
 
+def save_url_rss(url):
+	response = requests.get(url)
+
+	d = feedparser.parse(response)
+	
+	for post in d.entries:
+	    #print post.title + "\n"  + post.description+  "\n" + post.link+ "\n"+ post.published + "\n\n"
+	     c = canales(nombre = post.title,
+                    pub_fecha = post.published,
+                    descripcion = post.description,
+                    url = post.link)
+        c.save()
+
+	print response.text
+
+
 def get_feed_from_rss(url):
 	response = requests.get(url)
+
+	d = feedparser.parse(response)
+	
+
+	#obteniendo datos del feed 
+	for post in d.entries:
+	     feed = Feed(title = post.title,
+                    pub_date = post.published,
+                    image = post.image,
+                    content = post.description,
+                    link = post.link)
+
 	print response.text
 
 class Feed(object):
