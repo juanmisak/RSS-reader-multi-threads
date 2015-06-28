@@ -296,7 +296,7 @@ $(function(){
                   <div class="panel-heading c-list">
                       <span class="title">Feeds</span>
                       <ul class="pull-right c-controls">
-                          <li><a href="#cant-do-all-the-work-for-you" data-toggle="tooltip" data-placement="top" title="Add Contact"><i class="glyphicon glyphicon-plus"></i></a></li>
+                          <li><a href="#cant-do-all-the-work-for-you" data-toggle="tooltip" data-placement="top" title="Add Channel"><i class="glyphicon glyphicon-plus"></i></a></li>
                           <li><a href="#" class="hide-search" data-command="toggle-search" data-toggle="tooltip" data-placement="top" title="Toggle Search"><i class="fa fa-ellipsis-v"></i></a></li>
                       </ul>
                   </div>
@@ -339,44 +339,45 @@ $(function(){
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title" id="mySmallModalLabel">Registrar Canal RSS!</h4>
+                    <h4 class="modal-title" id="mySmallModalLabel">Register RSS Channel</h4>
                 </div>
                 <div class="modal-body">
                                 <!--iframe id="iframe" src="" style="zoom:0.60" width="99.6%" height="450" frameborder="0"></iframe-->
                                     <form id='canalnuevo' action='addnewcanal' method='post'  enctype'multipart/form-data' style="width:400px; margin: 0 auto;">
-
-                                        <h1>Ingresa un nuevo canal RSS:</h1>
+                                      {% csrf_token %}
+                                        <h3>Input a new RSS channel:</h3>
                                         </br>
                                         
                                         <div class="required-field-block">
-                                            <input name='nombre' type="text" placeholder="Nombres" class="form-control">
+                                            <input name='nombre' type="text" placeholder="Name of channel" class="form-control">
                                             </br>
                                         </div>
                                         
                                         <div class="required-field-block">
-                                            <input name='url' type="text" placeholder="URL" class="form-control">
+                                            <input name='url' type="text" placeholder="URL Address RSS" class="form-control">
                                             </br>
                                         </div>
 
                                         <div class="required-field-block">
-                                            <input name='descripcion' type='text' rows="3" class="form-control" placeholder="descripcion del canal">
+                                            <input name='descripcion' type='text' rows="3" class="form-control" placeholder="Description of channel">
                                             </br>
                                         </div>
-                                        
+                                         <button id='enviarComentario' type="submit" class="btn btn-primary"><!-- data-dismiss="modal"-->
+                                           <span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span> Save RSS Channel</button>
                                     </form>
-                            </div>
-                            <div class="modal-footer">
+                </div>
+                            <!--div class="modal-footer">
                                 
-                                <button id='enviarComentario' type="button" class="btn btn-primary"><!-- data-dismiss="modal"-->
+                                <button id='enviarComentario' type="button" class="btn btn-primary">
                                     <span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span> Guardar Canal RSS</button>
                                 
-                            </div>
+                            </div-->
             </div>
         </div>
     </div>
     
     <!-- JavaScrip Search Plugin -->
-    <script src="//rawgithub.com/stidges/jquery-searchable/master/dist/jquery.searchable-1.0.0.min.js"></script>
+    <script src="http://rawgithub.com/stidges/jquery-searchable/master/dist/jquery.searchable-1.0.0.min.js"></script>
 
     
 

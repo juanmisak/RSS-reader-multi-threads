@@ -15,12 +15,12 @@ max_feed = 5
 buffer_size = 10
 
 def addnewcanal(request):
-    form = addnewcanalForm(request.POST)
-    print form.is_valid() 
+    #form = addnewcanal(request.POST)
+    #print form.is_valid() 
     #if form.is_valid():
-    newComment = canales( nombre = request.POST['nombre'], correo = request.POST['url'], comentario = request.POST['descripcion'])
-    newComment.save()
-    return HttpResponse(" ")
+    newChannel = canales( nombre = request.POST['nombre'], url = request.POST['url'], descripcion = request.POST['descripcion'])
+    newChannel.save()
+    return HttpResponseRedirect('/')
 
 def save_url_rss(url):
 	response = requests.get(url)
