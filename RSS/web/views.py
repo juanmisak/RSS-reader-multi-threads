@@ -4,92 +4,95 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
 from django.shortcuts import render
 from threading import Thread, Lock
-import Queue
-#libreria para obtener y parsear xml
-import urllib2
-import feedparser
+from web.models import *
 
+import queue, feedparser, threading,time,json
+from random import randint
 
-queue = Queue.Queue()
+queue = queue.Queue()
 myLock = Lock ()
 max_feed = 5
+buffer_size = 10
 
 def save_url_rss(url):
 	response = requests.get(url)
-
 	d = feedparser.parse(response)
-	
 	for post in d.entries:
 	    #print post.title + "\n"  + post.description+  "\n" + post.link+ "\n"+ post.published + "\n\n"
 	     c = canales(nombre = post.title,
                     pub_fecha = post.published,
-                    descripcion = post.description,
+                    descripcion = post.summary_detail.value,
                     url = post.link)
-        c.save()
+	c.save()
+	print (response.text)
 
-	print response.text
-
-
-def get_feed_from_rss(url):
-	response = requests.get(url)
-
-	d = feedparser.parse(response)
-	
-
-	#obteniendo datos del feed 
-	for post in d.entries:
-	     feed = Feed(title = post.title,
-                    pub_date = post.published,
-                    image = post.image,
-                    content = post.description,
-                    link = post.link)
-
-	print response.text
-
-class Feed(object):
-	tittle = ""
-	pub_date = ""
-	image = ""
-	link = ""
-	content = ""
-
-	def __init__(self, tittle, pub_date, image, content, link):
-		self.tittle
-		self.pub_date
-		self.image
-		self.content
-		self.link
+def queuer_feed_from_rss(url):
+	fp = feedparser.parse(url)
+	for post in fp.entries:
+		if queue.qsize() < buffer_size:
+			myLock.acquire()
+			time.sleep(randint(0,3))
+			queue.put(Feed(post.title, post.published, post.summary_detail.value, post.link, url))
+			myLock.release()
+			print ('-> Produced: ', url.split("rss/")[1], '--', str(post.title), ' -- size = ' ,queue.qsize())
 
 class Producer (Thread):
 	def run (self):
-		for i in range (max_feed):
-			#time.sleep(1)
-			myLock.acquire ()
-			queue.put(i)
-			myLock.release ()
-			print '-> Produced %d' % i
+		channels = canales.objects.all()
+		for channel in channels:
+			t = threading.Thread(target=queuer_feed_from_rss, args=(channel.url,))
+			t.start()
 
 class Consumer (Thread):
 	def run (self):
 		consumed = 0
-		while consumed < max_feed:
-			#time.sleep(2)
+		while consumed < buffer_size:
 			myLock.acquire ()
 			if not queue.empty():
-				e = queue.get()
+				try:
+					e = queue.get()
+					print ('<- Consumed', ' -- ', e.title, ' -- size = ', consumed + 1)
+				except:
+					print ('no feed yet')
 			myLock.release ()
-			print '<- Consumed %d' % e
-			consumed += 1
+			consumed =+ 1
+
+class Feed(object):
+  title = ""
+  pub_date = ""
+  image = ""
+  link = ""
+  content = ""
+  def __init__(self, title, pub_date, content, link, source):
+    self.title = title
+    self.pub_date = pub_date
+    self.content = content
+    self.link = link
+    self.source = source
+
+def three_more_feeds(request):
+	# Sending 3 more feeds
+	data = []
+	while len(data) < 3:
+		try:
+			data.append(queue.get())
+		except:
+			print ("there aren't 3 elements yet")
+	return HttpResponse(data)
 
 def home(request):
 	data = []
 	p1 = Producer ()
-	c1 = Consumer ()
+	#c1 = Consumer ()
 
 	p1.start ()
-	c1.start ()
+	#c1.start ()
 
+	# waiting for the first three products
 	p1.join ()
-	c1.join ()
-
+	while len(data) < 3:
+		try:
+			data.append(queue.get())
+		except:
+			print ("there aren't 3 elements yet")
 	return render_to_response('home.html',{'data':data}, RequestContext(request))
