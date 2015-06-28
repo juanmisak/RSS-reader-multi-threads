@@ -6,13 +6,21 @@ from django.shortcuts import render
 from threading import Thread, Lock
 from web.models import *
 
-import queue, feedparser, threading,time,json
+import Queue, feedparser, threading,time,json
 from random import randint
 
-queue = queue.Queue()
+queue = Queue.Queue()
 myLock = Lock ()
 max_feed = 5
 buffer_size = 10
+
+def addnewcanal(request):
+    form = addnewcanalForm(request.POST)
+    print form.is_valid() 
+    #if form.is_valid():
+    newComment = canales( nombre = request.POST['nombre'], correo = request.POST['url'], comentario = request.POST['descripcion'])
+    newComment.save()
+    return HttpResponse(" ")
 
 def save_url_rss(url):
 	response = requests.get(url)
