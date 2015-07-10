@@ -88,11 +88,17 @@ $(function(){
               event.preventDefault();
               window.parent.location = "http://bootsnipp.com/iframe/4l0k2";
           });
-          $('a[href="#cant-do-all-the-work-for-you"]').on('click', function(event) {
+          $('a[href="#modal_add_channel"]').on('click', function(event) {
               event.preventDefault();
-              $('#cant-do-all-the-work-for-you').modal('show');
+              $('#modal_add_channel').modal('show');
           })
           
+
+          $('a[href="#modal_settings"]').on('click', function(event) {
+              event.preventDefault();
+              $('#modal_settings').modal('show');
+          })
+
           $('[data-command="toggle-search"]').on('click', function(event) {
               event.preventDefault();
               $(this).toggleClass('hide-search');
@@ -296,8 +302,21 @@ $(function(){
                   <div class="panel-heading c-list">
                       <span class="title">Feeds</span>
                       <ul class="pull-right c-controls">
-                          <li><a href="#cant-do-all-the-work-for-you" data-toggle="tooltip" data-placement="top" title="Add Channel"><i class="glyphicon glyphicon-plus"></i></a></li>
-                          <li><a href="#" class="hide-search" data-command="toggle-search" data-toggle="tooltip" data-placement="top" title="Toggle Search"><i class="fa fa-ellipsis-v"></i></a></li>
+                          <li><a href="#modal_add_channel" data-toggle="tooltip" data-placement="top" title="Add Channel"><i class="glyphicon glyphicon-plus"></i></a></li>
+                          <li><a href="#" class="hide-search" data-command="toggle-search" data-toggle="tooltip" data-placement="top" title="Search"><i class="glyphicon glyphicon-eye-open"></i></a></li>
+                          <li>
+                                            <div class="dropdown">
+                                              <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                Frequency Feeds
+                                                <span class="caret"></span>
+                                              </button>
+                                              <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                                <li><a href="#">3</a></li>
+                                                <li><a href="#">6</a></li>
+                                                <li><a href="#">9</a></li>
+                                                <li><a href="#">12</a></li>
+                                              </ul>
+                                            </div></li>
                       </ul>
                   </div>
                   
@@ -334,7 +353,7 @@ $(function(){
       </div>
     </div>
 
-    <div id="cant-do-all-the-work-for-you" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div id="modal_add_channel" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-md">
             <div class="modal-content">
                 <div class="modal-header">
@@ -366,12 +385,42 @@ $(function(){
                                            <span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span> Save RSS Channel</button>
                                     </form>
                 </div>
-                            <!--div class="modal-footer">
-                                
-                                <button id='enviarComentario' type="button" class="btn btn-primary">
-                                    <span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span> Guardar Canal RSS</button>
-                                
-                            </div-->
+            </div>
+        </div>
+    </div>
+
+    <div id="modal_settings" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="mySmallModalLabel">Settings of RSS Feeds</h4>
+                </div>
+                <div class="modal-body">
+                                <!--iframe id="iframe" src="" style="zoom:0.60" width="99.6%" height="450" frameborder="0"></iframe-->
+                                    <form id='canalnuevo' action='addnewcanal' method='post'  enctype'multipart/form-data' style="width:400px; margin: 0 auto;">
+                                      {% csrf_token %}
+                                        <h3>Configuration:</h3>
+                                        </br>
+                                        
+                                        <div class="required-field-block">
+                                            <input name='nombre' type="text" placeholder="Name of channel" class="form-control">
+                                            </br>
+                                        </div>
+                                        
+                                        <div class="required-field-block">
+                                            <input name='url' type="text" placeholder="URL Address RSS" class="form-control">
+                                            </br>
+                                        </div>
+
+                                        <div class="required-field-block">
+                                            <input name='descripcion' type='text' rows="3" class="form-control" placeholder="Description of channel">
+                                            </br>
+                                        </div>
+                                         <button id='enviarComentario' type="submit" class="btn btn-success"><!-- data-dismiss="modal"-->
+                                           <span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span> Save Configurations</button>
+                                    </form>
+                </div>
             </div>
         </div>
     </div>
