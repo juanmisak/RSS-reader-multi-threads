@@ -93,19 +93,16 @@ def three_more_feeds(request):
     while len(data) < 3:
         try:
             feed = queue.get()
-            data.append(feed)
+            data.append(feed.__dict__)
             print ('<- Consumed', ' -- ', feed.title, ' -- size = ',queue.qsize())
         except:
             print ("there aren't 3 elements yet")
-    return HttpResponse(data)
+    return HttpResponse(json.dumps(data), content_type="application/json; charset=utf-8;")
 
 def home(request):
     data = []
     p1 = Producer ()
     #c1 = Consumer ()
-    num = request.GET.get('num',None)
-    if num is None:
-        num = 3
 
     p1.start ()
     #c1.start ()
@@ -117,4 +114,4 @@ def home(request):
             data.append(queue.get())
         except:
             print ("there aren't 3 elements yet")
-    return render_to_response('home.html',{'data':data,'num':num}, RequestContext(request))
+    return render_to_response('home.html',{'data':data}, RequestContext(request))

@@ -81,7 +81,7 @@ $(function(){
               $('#back-to-bootsnipp').removeClass('hide');
           }
           
-          var num_get = {{num}};
+          var num_get = 5;
 
           
           $('[data-toggle="tooltip"]').tooltip();
@@ -134,32 +134,68 @@ $(function(){
 
           //var num_selected = $('#num').val();
           var load = function(){
-            var url = "http://localhost:8000/?num="+num_get;    
-            $(location).attr('href',url);
+            fetch3more();         
+            //var url = "http://localhost:8000/?num="+num_get;    
+            //$(location).attr('href',url);
           };
+          $('#get3more').click(function(e) {
+              $.getJSON("three_more_feeds/", function(result){
+                console.log(result);
+                //$('#testJson').text(result[1].title);
+                $('#contact-list').empty();
+                for (var i = 0; i < result.length; i++) {
+                $('#contact-list').append(
+                  "<button type='button' onClick='window.open('"+result[i].title+"');' zid='"+result[i].title+"'>"+result[i].title+"<br></button>"+
+                  "<li class='list-group-item'>"+
+                  "<div class='col-xs-12 col-sm-12'>"+
+                              "<span class='name'>"+result[i].content+"</span><br/>"+
+                              "<span class='glyphicon glyphicon-time text-muted c-info' data-toggle='tooltip' title='5842 Hillcrest Rd'></span>"+
+                              "<span >"+result[i].pub_date+"</span><br/>"+
+                              "<span class='glyphicon glyphicon-globe text-muted c-info' data-toggle='tooltip' title='5842 Hillcrest Rd'></span>"+
+                              "<span >Proporcionado por : "+result[i].source+"</span><br/>"+
+                              "<hr>"+
+                          "</div>"+
+                          "<div class='clearfix'></div>"+
+                      "</li>");
+                }
+            });
+          });
 
-          setInterval(load,10000*num_get);
+          function fetch3more(){
+            $.getJSON("three_more_feeds/", function(result){
+                console.log(result);
+                //$('#testJson').text(result[1].title);
+                $('#contact-list').empty();
+                for (var i = 0; i < result.length; i++) {
+                $('#contact-list').append(
+                  "<button type='button' onClick='window.open('"+result[i].title+"');' zid='"+result[i].title+"'>"+result[i].title+"<br></button>"+
+                  "<li class='list-group-item'>"+
+                  "<div class='col-xs-12 col-sm-12'>"+
+                              "<span class='name'>"+result[i].content+"</span><br/>"+
+                              "<span class='glyphicon glyphicon-time text-muted c-info' data-toggle='tooltip' title='5842 Hillcrest Rd'></span>"+
+                              "<span >"+result[i].pub_date+"</span><br/>"+
+                              "<span class='glyphicon glyphicon-globe text-muted c-info' data-toggle='tooltip' title='5842 Hillcrest Rd'></span>"+
+                              "<span >Proporcionado por : "+result[i].source+"</span><br/>"+
+                              "<hr>"+
+                          "</div>"+
+                          "<div class='clearfix'></div>"+
+                      "</li>");
+                }
+            });
+          }
+          setInterval(load,1000*num_get);
 
           $('#n3').click(function(e) {
-              e.preventDefault();// prevent the default anchor functionality
-              var url = "http://localhost:8000/?num=3";    
-              $(location).attr('href',url);
+              num_get = 3;
           });
           $('#n6').click(function(e) {
-              e.preventDefault();// prevent the default anchor functionality
-              var url = "http://localhost:8000/?num=6";   
-              $(location).attr('href',url); 
-              
+              num_get = 6;
           });
           $('#n9').click(function(e) {
-              e.preventDefault();// prevent the default anchor functionality
-              var url = "http://localhost:8000/?num=9";    
-              $(location).attr('href',url);
+            num_get = 9;
           });
           $('#n12').click(function(e) {
-              e.preventDefault();// prevent the default anchor functionality
-              var url = "http://localhost:8000/?num=12";   
-              $(location).attr('href',url); 
+              num_get = 12;
           });
 
 
@@ -352,7 +388,7 @@ $(function(){
                       <ul class="pull-right c-controls">
                           <li><a href="#modal_add_channel" data-toggle="tooltip" data-placement="top" title="Add Channel"><i class="glyphicon glyphicon-plus"></i></a></li>
                           <li><a href="#" class="hide-search" data-command="toggle-search" data-toggle="tooltip" data-placement="top" title="Search"><i class="glyphicon glyphicon-eye-open"></i></a></li>
-                          <li><a href="#" data-command="toggle-sync" data-toggle="tooltip" data-placement="top" title="Sync"><i class="glyphicon glyphicon-refresh"></i></a></li>
+                          <li><a href="#" id = "get3more" data-toggle="tooltip" data-placement="top" title="Sync"><i class="glyphicon glyphicon-refresh"></i></a></li>
                           <li>
                                             <div class="dropdown">
                                               <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -381,6 +417,19 @@ $(function(){
                   </div>
                   <ul class="list-group" id="contact-list">
 
+
+
+
+
+
+
+
+
+
+
+
+
+
                     {% for z in data %}
                       <button type="button" onClick="window.open('{{z.link}}');" zid="{{ z.title }}">{{ z.title }}<br> </button>
                      <li class="list-group-item">
@@ -396,11 +445,14 @@ $(function(){
                           <div class="clearfix"></div>
                       </li>
                     {% endfor %}
+
                   </ul>
               </div>
           </div>
       </div>
     </div>
+
+    <h1 id = "testJson"> jhsvhdsvahjfavshjfv </h1>
 
     <div id="modal_add_channel" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-md">
