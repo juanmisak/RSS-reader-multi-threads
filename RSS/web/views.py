@@ -103,6 +103,9 @@ def home(request):
     data = []
     p1 = Producer ()
     #c1 = Consumer ()
+    num = request.GET.get('num',None)
+    if num is None:
+        num = 3
 
     p1.start ()
     #c1.start ()
@@ -114,4 +117,4 @@ def home(request):
             data.append(queue.get())
         except:
             print ("there aren't 3 elements yet")
-    return render_to_response('home.html',{'data':data}, RequestContext(request))
+    return render_to_response('home.html',{'data':data,'num':num}, RequestContext(request))

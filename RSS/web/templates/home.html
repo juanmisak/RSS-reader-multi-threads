@@ -81,6 +81,8 @@ $(function(){
               $('#back-to-bootsnipp').removeClass('hide');
           }
           
+          var num_get = {{num}};
+
           
           $('[data-toggle="tooltip"]').tooltip();
           
@@ -109,6 +111,12 @@ $(function(){
                   $('.c-search').closest('.row').slideDown(100);
               }
           })
+
+          $('[data-command="toggle-sync"]').on('click', function(event) {
+              event.preventDefault();
+               var url = "http://localhost:8000/?num="+num_get;    
+              $(location).attr('href',url);
+          })
           
           $('#contact-list').searchable({
               searchField: '#contact-list-search',
@@ -120,7 +128,47 @@ $(function(){
               hide: function( elem ) {
                   elem.slideUp( 100 );
               }
-          })
+          });
+
+          ///////////////////////////////////////////////////////
+
+          //var num_selected = $('#num').val();
+          var load = function(){
+            var url = "http://localhost:8000/?num="+num_get;    
+            $(location).attr('href',url);
+          };
+
+          setInterval(load,10000*num_get);
+
+          $('#n3').click(function(e) {
+              e.preventDefault();// prevent the default anchor functionality
+              var url = "http://localhost:8000/?num=3";    
+              $(location).attr('href',url);
+          });
+          $('#n6').click(function(e) {
+              e.preventDefault();// prevent the default anchor functionality
+              var url = "http://localhost:8000/?num=6";   
+              $(location).attr('href',url); 
+              
+          });
+          $('#n9').click(function(e) {
+              e.preventDefault();// prevent the default anchor functionality
+              var url = "http://localhost:8000/?num=9";    
+              $(location).attr('href',url);
+          });
+          $('#n12').click(function(e) {
+              e.preventDefault();// prevent the default anchor functionality
+              var url = "http://localhost:8000/?num=12";   
+              $(location).attr('href',url); 
+          });
+
+
+          /*var load = function(){
+            var url = "http://localhost:8000/?num="+num_selected;    
+            $(location).attr('href',url);
+          };
+          setInterval(load,60000*num_get);*/
+
       });
       </script>
 
@@ -304,6 +352,7 @@ $(function(){
                       <ul class="pull-right c-controls">
                           <li><a href="#modal_add_channel" data-toggle="tooltip" data-placement="top" title="Add Channel"><i class="glyphicon glyphicon-plus"></i></a></li>
                           <li><a href="#" class="hide-search" data-command="toggle-search" data-toggle="tooltip" data-placement="top" title="Search"><i class="glyphicon glyphicon-eye-open"></i></a></li>
+                          <li><a href="#" data-command="toggle-sync" data-toggle="tooltip" data-placement="top" title="Sync"><i class="glyphicon glyphicon-refresh"></i></a></li>
                           <li>
                                             <div class="dropdown">
                                               <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -311,10 +360,10 @@ $(function(){
                                                 <span class="caret"></span>
                                               </button>
                                               <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                                                <li><a href="#">3</a></li>
-                                                <li><a href="#">6</a></li>
-                                                <li><a href="#">9</a></li>
-                                                <li><a href="#">12</a></li>
+                                                <li><a id="n3" >3</a></li>
+                                                <li><a id="n6" >6</a></li>
+                                                <li><a id="n9" >9</a></li>
+                                                <li><a id="n12">12</a></li>
                                               </ul>
                                             </div></li>
                       </ul>
